@@ -1,4 +1,5 @@
 import {
+	ForbiddenException,
 	HttpException,
 	HttpStatus,
 	Injectable,
@@ -54,7 +55,13 @@ export class UsersService {
 		}
 	}
 
-	remove(id: number) {
-		return `This action removes a #${id} user`;
+	async removeUser(id: string): Promise<User> {
+		const removedUser = await this.userModel.findByIdAndDelete(id).exec();
+
+		if (!removedUser) {
+			throw new ForbiddenException('User not found!');
+		} else {
+			return removedUser;
+		}
 	}
 }
