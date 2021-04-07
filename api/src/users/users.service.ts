@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -8,8 +8,14 @@ import { User, UserDocument } from './schema/user.schema';
 @Injectable()
 export class UsersService {
 	constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
-	create(createUserDto: CreateUserDto) {
-		return 'This action adds a new user';
+	async createUser(createUserDto: CreateUserDto): Promise<User> {
+		const newUser = new this.userModel(createUserDto);
+		try {
+			return await newUser.save();
+		} catch (error) {
+			console.log(error);
+			throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+		}
 	}
 
 	findAll() {
