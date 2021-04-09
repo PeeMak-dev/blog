@@ -23,8 +23,5 @@ export class User {
 		Object.assign(this, partial);
 	}
 
-	@Prop({ required: true })
-	password: string;
-
 }
 export const UserSchema = SchemaFactory.createForClass(User);

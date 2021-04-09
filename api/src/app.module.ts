@@ -15,15 +15,5 @@ import { AuthModule } from './authentication/auth/auth.module';
 	],
 	controllers: [AppController],
 	providers: [AppService],
-=======
-
-@Module({
-  imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
-    MongooseModule.forRoot(process.env.DATABASE_URL),
-    UsersModule,
-  ],
-  controllers: [AppController],
-  providers: [AppService],
-    
+})
 export class AppModule {}
