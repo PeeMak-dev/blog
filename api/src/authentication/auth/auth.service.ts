@@ -7,7 +7,7 @@ export class AuthService {
 
 	async validateUser(email: string, pass: string) {
 		const user = await this.userService.findUserByEmail(email);
-		console.log('validate: ', user);
+
 		if (user && user.password === pass) {
 			return user;
 		}
