@@ -22,6 +22,5 @@ export class User {
 	constructor(partial: Partial<User>) {
 		Object.assign(this, partial);
 	}
-
 }
 export const UserSchema = SchemaFactory.createForClass(User);
