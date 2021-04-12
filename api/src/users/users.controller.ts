@@ -1,3 +1,4 @@
+import { JwtAuthGuard } from './../authentication/guards/jwt-auth.guard';
 import {
 	Controller,
 	Get,
@@ -8,11 +9,15 @@ import {
 	Delete,
 	UseInterceptors,
 	ClassSerializerInterceptor,
+	UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './schema/user.schema';
+import { Roles } from 'src/authentication/roles/roles.decorator';
+import { Role } from 'src/authentication/roles/role.enum';
+import { RolesGuard } from 'src/authentication/guards/roles.guard';
 
 @Controller('users')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -28,6 +33,8 @@ export class UsersController {
 		});
 	}
 
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles(Role.Admin)
 	@Get()
 	async findAllUsers(): Promise<User[]> {
 		const users = await this.usersService.findAllUsers();
