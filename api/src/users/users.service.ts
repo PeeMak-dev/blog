@@ -64,7 +64,7 @@ export class UsersService {
 			return removedUser;
 		}
 	}
-	
+
 	async findUserByEmail(email: string): Promise<User> {
 		const user = await this.userModel.findOne({ email: email });
 
