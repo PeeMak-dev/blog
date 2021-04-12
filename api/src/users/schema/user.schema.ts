@@ -1,3 +1,4 @@
+import { Role } from 'src/authentication/roles/role.enum';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { Exclude } from 'class-transformer';
@@ -6,6 +7,10 @@ export type UserDocument = User & Document;
 
 @Schema()
 export class User {
+	constructor(partial: Partial<User>) {
+		Object.assign(this, partial);
+	}
+
 	@Prop()
 	name: string;
 
@@ -19,9 +24,7 @@ export class User {
 	@Prop({ required: true })
 	password: string;
 
-	constructor(partial: Partial<User>) {
-		Object.assign(this, partial);
-	}
-
+	@Prop({ required: true })
+	roles: Role[];
 }
 export const UserSchema = SchemaFactory.createForClass(User);
