@@ -10,6 +10,7 @@ import {
 	UseInterceptors,
 	ClassSerializerInterceptor,
 	UseGuards,
+	Req,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -18,6 +19,7 @@ import { User } from './schema/user.schema';
 import { Roles } from 'src/authentication/roles/roles.decorator';
 import { Role } from 'src/authentication/roles/role.enum';
 import { RolesGuard } from 'src/authentication/guards/roles.guard';
+import { Users } from './dto/users.dto';
 
 @Controller('users')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -36,12 +38,19 @@ export class UsersController {
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles(Role.Admin)
 	@Get()
-	async findAllUsers(): Promise<User[]> {
-		const users = await this.usersService.findAllUsers();
+	async findAllUsers(@Req() req) {
+		const res = await this.usersService.findAllUsers(req.query);
 
-		return users.map(
-			(user) => new User({ ...JSON.parse(JSON.stringify(user)) }),
-		);
+		return new Users({
+			docs: res.docs.map(
+				(user) => new User({ ...JSON.parse(JSON.stringify(user)) }),
+			),
+			meta: res.meta,
+		});
+
+		// return users.map(
+		// 	(user) => new User({ ...JSON.parse(JSON.stringify(user)) }),
+		// );
 	}
 
 	@Get(':id')

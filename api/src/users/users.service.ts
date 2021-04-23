@@ -1,3 +1,4 @@
+import { QueryOptions } from './../models/query-option.interface';
 import {
 	ForbiddenException,
 	HttpException,
@@ -9,6 +10,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { Users } from './dto/users.dto';
 import { User, UserDocument } from './schema/user.schema';
 
 @Injectable()
@@ -24,9 +26,34 @@ export class UsersService {
 		}
 	}
 
+	/* 
 	async findAllUsers(): Promise<User[]> {
 		const users = await this.userModel.find().exec();
 		return users;
+	} */
+
+	async findAllUsers(options: QueryOptions): Promise<Users> {
+		const result = await this.userModel
+			.find()
+			.skip(Number(options.offset))
+			.limit(Number(options.limit))
+			.exec();
+
+		const count = await this.userModel.countDocuments();
+		console.log(count);
+		if (!result) {
+			throw new NotFoundException();
+		} else {
+			return {
+				docs: result,
+				meta: {
+					limit: options.limit,
+					totalDocs: result.length,
+					estimatedDocs: count,
+					offset: options.offset,
+				},
+			};
+		}
 	}
 
 	async findUser(id: string): Promise<User> {
