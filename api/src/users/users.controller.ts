@@ -11,6 +11,8 @@ import {
 	ClassSerializerInterceptor,
 	UseGuards,
 	Req,
+	UsePipes,
+	ValidationPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -26,6 +28,7 @@ import { Users } from './dto/users.dto';
 export class UsersController {
 	constructor(private readonly usersService: UsersService) {}
 
+	@UsePipes(new ValidationPipe({ whitelist: true }))
 	@Post()
 	async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
 		return new User({
