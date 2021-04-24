@@ -12,16 +12,17 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Users } from './dto/users.dto';
 import { User, UserDocument } from './schema/user.schema';
+import { Role } from 'src/authentication/roles/role.enum';
 
 @Injectable()
 export class UsersService {
 	constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 	async createUser(createUserDto: CreateUserDto): Promise<User> {
 		const newUser = new this.userModel(createUserDto);
+		newUser.roles.push(Role.User);
 		try {
 			return await newUser.save();
 		} catch (error) {
-			console.log(error);
 			throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
 		}
 	}
