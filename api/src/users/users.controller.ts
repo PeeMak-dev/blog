@@ -1,4 +1,3 @@
-import { JwtAuthGuard } from './../authentication/guards/jwt-auth.guard';
 import {
 	Controller,
 	Get,
@@ -38,7 +37,7 @@ export class UsersController {
 		});
 	}
 
-	@UseGuards(JwtAuthGuard, RolesGuard)
+	@UseGuards(RolesGuard)
 	@Roles(Role.Admin)
 	@Get()
 	async findAllUsers(@Req() req) {
