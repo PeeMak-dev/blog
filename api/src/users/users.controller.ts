@@ -1,3 +1,4 @@
+import { Public } from './../shared/decorators/public.decorator';
 import {
 	Controller,
 	Get,
@@ -27,6 +28,7 @@ import { Users } from './dto/users.dto';
 export class UsersController {
 	constructor(private readonly usersService: UsersService) {}
 
+	@Public()
 	@UsePipes(new ValidationPipe({ whitelist: true }))
 	@Post()
 	async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
