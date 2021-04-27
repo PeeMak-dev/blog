@@ -1,4 +1,39 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+mat-toolbar {
+  &container {
+    padding-left: 100px;
+  }
+}
+/* Helper Classes */
+
+.margin {
+  &-left {
+    margin-left: 16px;
+  }
+
+  &-top {
+    margin-top: 16px;
+  }
+
+  &-bottom {
+    margin-bottom: 16px;
+  }
+
+  &-right {
+    margin-right: 16px;
+  }
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
