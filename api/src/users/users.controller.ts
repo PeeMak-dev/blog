@@ -78,6 +78,8 @@ export class UsersController {
 		});
 	}
 
+	@UseGuards(RolesGuard)
+	@Roles(Role.Admin)
 	@Delete(':id')
 	async removeUser(@Param('id') id: string): Promise<User> {
 		return new User({
