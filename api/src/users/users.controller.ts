@@ -1,4 +1,4 @@
-import { JwtAuthGuard } from './../authentication/guards/jwt-auth.guard';
+import { Public } from './../shared/decorators/public.decorator';
 import {
 	Controller,
 	Get,
@@ -11,6 +11,8 @@ import {
 	ClassSerializerInterceptor,
 	UseGuards,
 	Req,
+	UsePipes,
+	ValidationPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -26,6 +28,8 @@ import { Users } from './dto/users.dto';
 export class UsersController {
 	constructor(private readonly usersService: UsersService) {}
 
+	@Public()
+	@UsePipes(new ValidationPipe({ whitelist: true }))
 	@Post()
 	async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
 		return new User({
@@ -35,7 +39,7 @@ export class UsersController {
 		});
 	}
 
-	@UseGuards(JwtAuthGuard, RolesGuard)
+	@UseGuards(RolesGuard)
 	@Roles(Role.Admin)
 	@Get()
 	async findAllUsers(@Req() req) {
@@ -74,6 +78,8 @@ export class UsersController {
 		});
 	}
 
+	@UseGuards(RolesGuard)
+	@Roles(Role.Admin)
 	@Delete(':id')
 	async removeUser(@Param('id') id: string): Promise<User> {
 		return new User({
