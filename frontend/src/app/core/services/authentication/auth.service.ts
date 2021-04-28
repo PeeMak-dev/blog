@@ -11,7 +11,10 @@ export class AuthService {
     try {
       return {
         result: await this.http
-          .post<any>('http://localhost:3000/auth/login', { email, password })
+          .post<any>('/api/auth/login', {
+            email,
+            password,
+          })
           .toPromise(),
       };
     } catch (error) {
