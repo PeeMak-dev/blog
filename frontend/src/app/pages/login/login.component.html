@@ -1,2 +1,35 @@
-<p>login works!</p>
-<button mat-raised-button color="primary" (click)="login()">LOGIN</button>
+<div class="container flex">
+  <mat-card>
+    <mat-card-header class="padding">
+      <mat-card-title>WELCOME!</mat-card-title>
+      <mat-card-subtitle>Login with your email and password</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content class="padding-horizontal">
+      <form [formGroup]="loginForm" id="loginForm" (ngSubmit)="login(loginForm)">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Email</mat-label>
+          <mat-icon matSuffix>email</mat-icon>
+          <input matInput type="email" formControlName="email">
+          <mat-error *ngIf="loginForm.controls.email.hasError('email') && !loginForm.controls.email.hasError('required')">
+            Please enter a valid email address
+          </mat-error>
+          <mat-error *ngIf="loginForm.controls.email.hasError('required')">
+            Email is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Password</mat-label>
+          <mat-icon matSuffix>lock</mat-icon>
+          <input matInput type="password" formControlName="password">
+          <mat-error *ngIf="loginForm.controls.password.hasError('required')">
+            Password is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+      </form>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" type="submit" form="loginForm" [disabled]="loginForm.invalid">LOG IN</button>
+    </mat-card-actions>
+  </mat-card>
+</div>

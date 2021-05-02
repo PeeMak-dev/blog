@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
 export class AuthService {
   constructor(private http: HttpClient) {}
 
-  async login(email: string, password: string) {
+  async loginUser({ email, password }: { email: string; password: string }) {
     try {
       return {
         result: await this.http
@@ -19,7 +19,19 @@ export class AuthService {
       };
     } catch (error) {
       return {
-        error,
+        error: error.error,
+      };
+    }
+  }
+
+  async registerUser(user: any) {
+    try {
+      return {
+        result: await this.http.post('/api/users', { ...user }).toPromise(),
+      };
+    } catch (error) {
+      return {
+        error: error.error,
       };
     }
   }

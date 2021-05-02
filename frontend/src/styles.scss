@@ -32,8 +32,62 @@ mat-toolbar {
   &-right {
     margin-right: 16px;
   }
+
+  &-horizontal {
+    margin-left: 16px;
+    margin-right: 16px;
+  }
+
+  &-vertical {
+    margin-top: 16px;
+    margin-bottom: 16px;
+  }
+}
+
+.padding {
+  padding: 16px 16px;
+  &-left {
+    padding-left: 16px;
+  }
+
+  &-top {
+    padding-top: 16px;
+  }
+
+  &-bottom {
+    padding-bottom: 16px;
+  }
+
+  &-right {
+    padding-right: 16px;
+  }
+
+  &-horizontal {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  &-vertical {
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
+}
+
+.flex {
+  display: flex;
 }
 
 .spacer {
   flex: 1 1 auto;
+}
+
+/* Size Helpers */
+.full {
+  &-width {
+    width: 100%;
+  }
+
+  &-height {
+    height: 100%;
+  }
 }
