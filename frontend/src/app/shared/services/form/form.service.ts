@@ -15,4 +15,11 @@ export class FormService {
       username: ['', Validators.required],
     });
   }
+
+  loginForm(): FormGroup {
+    return this.formBuilder.group({
+      email: ['', [Validators.email, Validators.required]],
+      password: ['', Validators.required],
+    });
+  }
 }
