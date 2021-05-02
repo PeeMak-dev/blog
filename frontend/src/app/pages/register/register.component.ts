@@ -21,11 +21,16 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {}
 
   async register(user: any) {
-    console.log(user);
+    if (!user.invalid) {
+      const { result, error } = await this.authService.registerUser({
+        ...user.value,
+      });
 
-    const { result, error } = await this.authService.registerUser({ ...user });
-
-    console.log(result);
-    console.error('eerorsafsdafdasfsdf: ', error);
+      if (!error) {
+        console.log('registration successful: ', result);
+      } else {
+        console.error('Registration failed: ', error);
+      }
+    }
   }
 }
