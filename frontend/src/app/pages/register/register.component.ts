@@ -1,4 +1,6 @@
+import { FormService } from './../../shared/services/form/form.service';
 import { Component, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { AuthService } from 'src/app/core/services/authentication/auth.service';
 
 @Component({
@@ -7,17 +9,20 @@ import { AuthService } from 'src/app/core/services/authentication/auth.service';
   styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent implements OnInit {
-  constructor(private authService: AuthService) {}
+  registerForm: FormGroup;
+
+  constructor(
+    private authService: AuthService,
+    private formService: FormService
+  ) {
+    this.registerForm = this.formService.registerForm();
+  }
 
   ngOnInit(): void {}
 
-  async register() {
-    const user = {
-      name: 'mark',
-      email: 'mark@gmail.com',
-      password: 'password',
-      username: 'makmak',
-    };
+  async register(user: any) {
+    console.log(user);
+
     const { result, error } = await this.authService.registerUser({ ...user });
 
     console.log(result);

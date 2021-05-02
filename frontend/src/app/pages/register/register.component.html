@@ -4,7 +4,7 @@
     <mat-card-title>WELCOME</mat-card-title>
   </mat-card-header>
   <mat-card-content class="padding-horizontal">
-    <form >
+    <form [formGroup]="registerForm" id="registerForm" (ngSubmit)="register(registerForm.value)">
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Name</mat-label>
         <mat-icon matSuffix>person</mat-icon>
@@ -23,7 +23,7 @@
     </form>
   </mat-card-content>
   <mat-card-actions>
-    <button mat-raised-button (click)="register()">REGISTER</button>
+    <button mat-raised-button form="registerForm" type="submit">REGISTER</button>
   </mat-card-actions>
 </mat-card>
 </div>
