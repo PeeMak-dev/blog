@@ -8,17 +8,22 @@
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Name</mat-label>
         <mat-icon matSuffix>person</mat-icon>
-        <input matInput type="string">
+        <input matInput type="string" formControlName="name">
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>User Name</mat-label>
+        <mat-icon matSuffix>lock</mat-icon>
+        <input matInput type="text" formControlName="username">
       </mat-form-field>
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Email</mat-label>
         <mat-icon matSuffix>email</mat-icon>
-        <input matInput type="email" >
+        <input matInput type="email" formControlName="email">
       </mat-form-field>
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Password</mat-label>
         <mat-icon matSuffix>lock</mat-icon>
-        <input matInput type="password" >
+        <input matInput type="password" formControlName="password">
       </mat-form-field>
     </form>
   </mat-card-content>
