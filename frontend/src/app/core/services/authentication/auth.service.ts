@@ -23,4 +23,16 @@ export class AuthService {
       };
     }
   }
+
+  async registerUser(user: any) {
+    try {
+      return {
+        result: await this.http.post('/api/users', { ...user }).toPromise(),
+      };
+    } catch (error) {
+      return {
+        error: error,
+      };
+    }
+  }
 }

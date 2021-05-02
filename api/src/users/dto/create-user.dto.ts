@@ -2,7 +2,7 @@ import { IsEmail, IsString } from 'class-validator';
 import { Role } from 'src/authentication/roles/role.enum';
 export class CreateUserDto {
 	@IsString()
-	readonly name: string;
+	readonly name?: string;
 
 	@IsString()
 	readonly username: string;
