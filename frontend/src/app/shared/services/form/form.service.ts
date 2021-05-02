@@ -10,7 +10,7 @@ export class FormService {
   registerForm(): FormGroup {
     return this.formBuilder.group({
       name: ['', Validators.required],
-      email: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
       username: ['', Validators.required],
     });

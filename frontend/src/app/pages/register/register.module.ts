@@ -1,3 +1,5 @@
+import { MyErrorStateMatcher } from './../../shared/classes/error-matcher';
+import { ErrorStateMatcher } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -23,5 +25,6 @@ import { MatIconModule } from '@angular/material/icon';
     MatButtonModule,
     MatIconModule,
   ],
+  providers: [{ provide: ErrorStateMatcher, useClass: MyErrorStateMatcher }],
 })
 export class RegisterModule {}
