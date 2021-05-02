@@ -2,6 +2,7 @@ import { FormService } from './../../shared/services/form/form.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { AuthService } from 'src/app/core/services/authentication/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -13,7 +14,8 @@ export class RegisterComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private formService: FormService
+    private formService: FormService,
+    private router: Router
   ) {
     this.registerForm = this.formService.registerForm();
   }
@@ -28,6 +30,7 @@ export class RegisterComponent implements OnInit {
 
       if (!error) {
         console.log('registration successful: ', result);
+        this.router.navigate(['login']);
       } else {
         console.error('Registration failed: ', error);
       }
