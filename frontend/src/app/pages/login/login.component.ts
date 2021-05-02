@@ -23,18 +23,21 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {}
 
   async login(credential: any) {
-    console.log(credential.value);
-    const { result, error } = await this.authService.login(
-      'peemak@gmail.com',
-      'pass'
-    );
+    const { email, password } = credential.value;
 
-    if (!error) {
-      console.log(result);
-      localStorage.setItem('blog-token', result.access_token);
-      this.router.navigate(['main', 'home']);
-    } else {
-      console.error(error);
+    if (!credential.invalid) {
+      const { result, error } = await this.authService.loginUser({
+        email,
+        password,
+      });
+
+      if (!error) {
+        console.log(result);
+        localStorage.setItem('blog-token', result.access_token);
+        this.router.navigate(['main', 'home']);
+      } else {
+        console.error(error);
+      }
     }
   }
 }
