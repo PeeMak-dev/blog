@@ -1,3 +1,4 @@
+import { Links } from './../../models/links.interface';
 import { Meta } from 'src/models/meta.interface';
 import { User } from '../schema/user.schema';
 
@@ -7,5 +8,6 @@ export class Users {
 	}
 
 	docs?: User[];
-	meta: Meta;
+	meta?: Meta;
+	links?: Links;
 }

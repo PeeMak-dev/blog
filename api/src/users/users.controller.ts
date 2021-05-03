@@ -43,13 +43,17 @@ export class UsersController {
 	@Roles(Role.Admin)
 	@Get()
 	async findAllUsers(@Req() req) {
-		const res = await this.usersService.findAllUsers(req.query);
+		const res = await this.usersService.findAllUsers(
+			req.query,
+			'http://localhost:3000/api/users',
+		);
 
 		return new Users({
 			docs: res.docs.map(
 				(user) => new User({ ...JSON.parse(JSON.stringify(user)) }),
 			),
 			meta: res.meta,
+			links: res.links,
 		});
 
 		// return users.map(
