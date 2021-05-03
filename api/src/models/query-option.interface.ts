@@ -1,4 +1,4 @@
 export interface QueryOptions {
-	offset?: number;
+	page?: number;
 	limit?: number;
 }

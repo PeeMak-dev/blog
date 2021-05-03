@@ -1,3 +1,4 @@
+import { Links } from './../models/links.interface';
 import { QueryOptions } from './../models/query-option.interface';
 import {
 	ForbiddenException,
@@ -33,30 +34,89 @@ export class UsersService {
 		return users;
 	} */
 
-	async findAllUsers(options: QueryOptions): Promise<Users> {
+	async findAllUsers(options: QueryOptions, route: string): Promise<Users> {
+		const offset = Number((options.page - 1) * options.limit);
+		const limit = options.limit;
+		const currentPage = options.page;
+		const count = await this.userModel.countDocuments();
+		const totalPages = this.calcTotalPage({ count, limit });
+
+		/* add if: currentPage > totalPages */
+		// add here
+
 		const result = await this.userModel
 			.find()
-			.skip(Number(options.offset))
+			.skip(Number(offset))
 			.limit(Number(options.limit))
 			.exec();
 
-		const count = await this.userModel.countDocuments();
-		console.log(count);
 		if (!result) {
 			throw new NotFoundException();
 		} else {
 			return {
 				docs: result,
 				meta: {
-					limit: options.limit,
+					limit: limit ? limit : null,
 					totalDocs: result.length,
 					estimatedDocs: count,
-					offset: options.offset,
+					offset: offset,
+					currentPage: currentPage ? currentPage : 1,
+					totalPages: currentPage ? totalPages : 1,
+				},
+				links: {
+					...this.generateLinks({ limit, currentPage, totalPages, route }),
 				},
 			};
 		}
 	}
 
+	calcTotalPage({ count, limit }: { count: number; limit: number }): number {
+		const remainder = count % limit;
+
+		if (remainder > 0) {
+			return Math.floor(count / limit) + 1;
+		} else {
+			return Math.floor(count / limit);
+		}
+	}
+
+	generateLinks({
+		limit,
+		currentPage,
+		totalPages,
+		route,
+	}: {
+		limit: number;
+		currentPage: number;
+		totalPages: number;
+		route: string;
+	}): Links {
+		if (limit) {
+			const links: Links = {
+				first: `${route}?page=${1}&limit=${limit}`,
+				next:
+					currentPage < totalPages
+						? `${route}?page=${Number(currentPage) + 1}&limit=${limit}`
+						: `${route}?page=${totalPages}&limit=${limit}`,
+				previous:
+					currentPage > 1
+						? `${route}?page=${Number(currentPage) - 1}&limit=${limit}`
+						: null,
+				last: `${route}?page=${totalPages}&limit=${limit}`,
+			};
+
+			return links;
+		} else {
+			const links: Links = {
+				first: null,
+				next: null,
+				previous: null,
+				last: null,
+			};
+
+			return links;
+		}
+	}
 	async findUser(id: string): Promise<User> {
 		const user = await this.userModel.findById(id).exec();
 
