@@ -34,26 +34,41 @@ export class UsersService {
 	} */
 
 	async findAllUsers(options: QueryOptions): Promise<Users> {
+		const offset = (options.page - 1) * options.limit;
+		const limit = options.limit;
+		const currentPage = options.page;
+		const count = await this.userModel.countDocuments();
+
 		const result = await this.userModel
 			.find()
-			.skip(Number(options.offset))
+			.skip(Number(offset))
 			.limit(Number(options.limit))
 			.exec();
 
-		const count = await this.userModel.countDocuments();
-		console.log(count);
 		if (!result) {
 			throw new NotFoundException();
 		} else {
 			return {
 				docs: result,
 				meta: {
-					limit: options.limit,
+					limit: limit,
 					totalDocs: result.length,
 					estimatedDocs: count,
-					offset: options.offset,
+					offset: Number(offset),
+					currentPage: currentPage,
+					totalPages: this.calcTotalPage({ count, limit }),
 				},
 			};
+		}
+	}
+
+	calcTotalPage({ count, limit }: { count: number; limit: number }): number {
+		const remainder = count % limit;
+
+		if (remainder > 0) {
+			return Math.floor(count / limit) + 1;
+		} else {
+			return Math.floor(count / limit);
 		}
 	}
 
