@@ -1,12 +1,13 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { User } from '../../models/interfaces/users/user.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UsersService {
-  users = new BehaviorSubject({});
+  users = new BehaviorSubject({} as User);
 
   route: string = 'localhost:3000/api/users';
 
@@ -28,7 +29,9 @@ export class UsersService {
     params = params.append('limit', String(size));
 
     try {
-      const result = await this.http.get(`${route}`, { params }).toPromise();
+      const result: User = (await this.http
+        .get(`${route}`, { params })
+        .toPromise()) as User;
 
       this.users.next(result);
       console.log(result);
