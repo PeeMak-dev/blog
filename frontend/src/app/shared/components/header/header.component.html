@@ -1,5 +1,6 @@
 <mat-toolbar color="primary">
   <span>LOGO</span>
   <span class="spacer"></span>
-  <button mat-raised-button color="warn" (click)="logout()">LOGOUT</button>
+  <button mat-raised-button color="sercondary" (click)="navigate(['main', 'users'])">USERS</button>
+  <button mat-raised-button color="warn" (click)="navigate(['main', 'home'])">LOGOUT</button>
 </mat-toolbar>
