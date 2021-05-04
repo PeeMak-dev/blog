@@ -7,9 +7,9 @@ import { User } from '../../models/interfaces/users/user.interface';
   providedIn: 'root',
 })
 export class UsersService {
-  users = new BehaviorSubject({} as User);
+  users = new BehaviorSubject(null);
 
-  route: string = 'localhost:3000/api/users';
+  route: string = 'api/users';
 
   constructor(private http: HttpClient) {
     this.findAll({ page: 1, size: 10, route: this.route });
@@ -34,7 +34,6 @@ export class UsersService {
         .toPromise()) as User;
 
       this.users.next(result);
-      console.log(result);
     } catch (error) {}
   }
 
