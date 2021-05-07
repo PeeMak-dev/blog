@@ -39,8 +39,9 @@ export class UsersController {
 		});
 	}
 
-	@UseGuards(RolesGuard)
-	@Roles(Role.Admin)
+	// @UseGuards(RolesGuard)
+	// @Roles(Role.Admin)
+	@Public()
 	@Get()
 	async findAllUsers(@Req() req) {
 		const res = await this.usersService.findAllUsers(

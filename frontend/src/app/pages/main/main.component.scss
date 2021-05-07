@@ -1,0 +1,16 @@
+.main {
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+
+  .content {
+    flex-grow: 1;
+    min-height: 0;
+    width: 90%;
+    margin: 0 auto;
+  }
+}
+
+:host {
+  box-sizing: border-box;
+}
