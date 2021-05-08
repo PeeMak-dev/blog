@@ -40,12 +40,13 @@ export class UsersService {
 		const currentPage = options.page;
 		const count = await this.userModel.countDocuments();
 		const totalPages = this.calcTotalPage({ count, limit });
-
+		const regex = options.filter ? options.filter : '';
 		/* add if: currentPage > totalPages */
 		// add here
 
 		const result = await this.userModel
-			.find()
+			.find({ username: { $regex: regex, $options: 'i' } })
+			.sort({ username: 'asc' })
 			.skip(Number(offset))
 			.limit(Number(options.limit))
 			.exec();
