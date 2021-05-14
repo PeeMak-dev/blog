@@ -1,4 +1,3 @@
-import { Links } from './../models/links.interface';
 import { QueryOptions } from './../models/query-option.interface';
 import {
 	ForbiddenException,
@@ -14,10 +13,14 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { Users } from './dto/users.dto';
 import { User, UserDocument } from './schema/user.schema';
 import { Role } from 'src/authentication/roles/role.enum';
+import { PaginationService } from 'src/shared/services/pagination/pagination.service';
 
 @Injectable()
 export class UsersService {
-	constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+	constructor(
+		@InjectModel(User.name) private userModel: Model<UserDocument>,
+		private paginationService: PaginationService,
+	) {}
 	async createUser(createUserDto: CreateUserDto): Promise<User> {
 		const newUser = new this.userModel(createUserDto);
 		newUser.roles.push(Role.User);
@@ -35,88 +38,37 @@ export class UsersService {
 	} */
 
 	async findAllUsers(options: QueryOptions, route: string): Promise<Users> {
-		const offset = Number((options.page - 1) * options.limit);
-		const limit = options.limit;
-		const currentPage = options.page;
-		const count = await this.userModel.countDocuments();
-		const totalPages = this.calcTotalPage({ count, limit });
+		const docCount = await this.userModel.countDocuments();
+		const {
+			limit,
+			offset,
+			filter,
+			meta,
+			links,
+		} = this.paginationService.paginate({ options, route, docCount });
 
 		/* add if: currentPage > totalPages */
 		// add here
 
 		const result = await this.userModel
-			.find()
-			.skip(Number(offset))
-			.limit(Number(options.limit))
+			.find({ username: { $regex: filter, $options: 'i' } })
+			.sort({ username: 'asc' })
+			.skip(offset)
+			.limit(limit)
 			.exec();
 
+		meta.totalDocs = result.length;
 		if (!result) {
 			throw new NotFoundException();
 		} else {
 			return {
 				docs: result,
-				meta: {
-					limit: limit ? limit : null,
-					totalDocs: result.length,
-					estimatedDocs: count,
-					offset: offset,
-					currentPage: currentPage ? currentPage : 1,
-					totalPages: currentPage ? totalPages : 1,
-				},
-				links: {
-					...this.generateLinks({ limit, currentPage, totalPages, route }),
-				},
+				meta: meta,
+				links: links,
 			};
 		}
 	}
 
-	calcTotalPage({ count, limit }: { count: number; limit: number }): number {
-		const remainder = count % limit;
-
-		if (remainder > 0) {
-			return Math.floor(count / limit) + 1;
-		} else {
-			return Math.floor(count / limit);
-		}
-	}
-
-	generateLinks({
-		limit,
-		currentPage,
-		totalPages,
-		route,
-	}: {
-		limit: number;
-		currentPage: number;
-		totalPages: number;
-		route: string;
-	}): Links {
-		if (limit) {
-			const links: Links = {
-				first: `${route}?page=${1}&limit=${limit}`,
-				next:
-					currentPage < totalPages
-						? `${route}?page=${Number(currentPage) + 1}&limit=${limit}`
-						: `${route}?page=${totalPages}&limit=${limit}`,
-				previous:
-					currentPage > 1
-						? `${route}?page=${Number(currentPage) - 1}&limit=${limit}`
-						: null,
-				last: `${route}?page=${totalPages}&limit=${limit}`,
-			};
-
-			return links;
-		} else {
-			const links: Links = {
-				first: null,
-				next: null,
-				previous: null,
-				last: null,
-			};
-
-			return links;
-		}
-	}
 	async findUser(id: string): Promise<User> {
 		const user = await this.userModel.findById(id).exec();
 

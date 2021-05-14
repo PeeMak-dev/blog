@@ -4,6 +4,7 @@ import { UsersController } from './users.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './schema/user.schema';
 import * as bcrypt from 'bcrypt';
+import { PaginationService } from 'src/shared/services/pagination/pagination.service';
 
 @Module({
 	imports: [
@@ -29,7 +30,7 @@ import * as bcrypt from 'bcrypt';
 		]),
 	],
 	controllers: [UsersController],
-	providers: [UsersService],
+	providers: [UsersService, PaginationService],
 	exports: [UsersService],
 })
 export class UsersModule {}
